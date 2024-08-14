@@ -79,11 +79,22 @@ const login = async (req,res)=>{
 
 const logOut= (req,res)=>{
     try{
-        return res.status(200).cookie("token","",{maxAge:1,httpOnly:true}).json({message:"User logged out successfully"});
+        return res.status(200).cookie("token","",{maxAge:0}).json({message:"User logged out successfully"});
     }
     catch(error){
         console.log(error)
     }
 }
 
-module.exports = {register,login,logOut};
+
+const getOtherUsers = async (req,res)=>{
+    try {
+        const loggedInUserID = req.id;
+        const otherUsers=await User.find({_id:{$ne:loggedInUserID}}).select("-password");
+        return res.status(200).json(otherUsers);
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports = {register,login,logOut,getOtherUsers};
