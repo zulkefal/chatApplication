@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
-const jw = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const register = async (req,res)=>{
 
     try{
@@ -50,6 +50,7 @@ const login = async (req,res)=>{
             return res.status(400).json({message:"Please fill all the fields"});
         }
         const user = await User.findOne({userName});
+
         if(!user)
         {
             return res.status(400).json({message:"User does not exist"});
@@ -65,7 +66,9 @@ const login = async (req,res)=>{
             userrID:user._id,
         }
 
-        const token = await jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn:"1h"});
+        const token = await jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn:"1d"});
+        return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000,httpOnly:true, sameSite:'strict'}).json({"message":"User logged in successfully",_id:user._id,userName:user.userName,fullName:user.fullName,profilePhoto:user.profilePhoto});
+
 
     }
     catch(err)
@@ -74,4 +77,13 @@ const login = async (req,res)=>{
     }
 };
 
-module.exports = {register};
+const logOut= (req,res)=>{
+    try{
+        return res.status(200).cookie("token","",{maxAge:1,httpOnly:true}).json({message:"User logged out successfully"});
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+module.exports = {register,login,logOut};
