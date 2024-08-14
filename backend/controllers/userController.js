@@ -1,10 +1,10 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
-
+const jw = require('jsonwebtoken');
 const register = async (req,res)=>{
 
     try{
-        const {fullName,userName,password,confirmPassword, gender,profilePhoto} = req.body;
+        const {fullName,userName,password,confirmPassword, gender} = req.body;
         if(!fullName || !userName || !password || !confirmPassword ||!gender)
         {
             return res.status(400).json({message:"Please fill all the fields"});
@@ -15,6 +15,7 @@ const register = async (req,res)=>{
         }
 
         const user = await User.findOne({userName});
+
         if(user)
         {
             return res.status(400).json({message:"User already exists"});
@@ -28,9 +29,11 @@ const register = async (req,res)=>{
                 fullName,
                 userName,
                 password:hashPassword,
-                profilePhoto:gender === male ? maleProfile : femaleProfile,
+                profilePhoto:gender === "male" ? maleProfile : femaleProfile,
                 gender
         });
+
+        return res.status(201).json({message:"User registered successfully"});
     }
 
 }
@@ -38,5 +41,37 @@ const register = async (req,res)=>{
         console.log(err);
     }
 }
+const login = async (req,res)=>{
+    try{
+
+        const {userName,password} = req.body;
+        if(!userName || !password)
+        {
+            return res.status(400).json({message:"Please fill all the fields"});
+        }
+        const user = await User.findOne({userName});
+        if(!user)
+        {
+            return res.status(400).json({message:"User does not exist"});
+        }
+
+        const isPasswordMatch = await bcrypt.compare(password,user.password); 
+        if(!isPasswordMatch)
+        {
+            return res.status(400).json({message:"Incorrect Password"});
+        }
+
+        const tokenData={
+            userrID:user._id,
+        }
+
+        const token = await jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn:"1h"});
+
+    }
+    catch(err)
+    {
+        console.log(err)
+    }
+};
 
 module.exports = {register};

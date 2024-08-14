@@ -9,7 +9,7 @@ const userModel = new mongoose.Schema({
         type:String,
         required:true
     },
-    passWord:{
+    password:{
         type:String,
         required:true
     },
@@ -25,4 +25,4 @@ const userModel = new mongoose.Schema({
 },{timestamps:true});
 
 const User = mongoose.model('User',userModel);
-module.exports = {User};
+module.exports = User;

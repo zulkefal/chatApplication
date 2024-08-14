@@ -6,7 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 
 dotenv.config({});
 
-
+app.use(express.json());
 
 //routes
 
