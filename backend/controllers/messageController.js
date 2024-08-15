@@ -3,29 +3,25 @@ const { Message } = require("../models/messageModel");
 
 const sendMessage =async (req, res) => {
     try {
-        // const senderId = req.id;
-        // const receiverId = req.params.id;
-         const senderId = '66bcf8fd0219a929c080cdeb';
-        const receiverId = '66bc9a3ededef8d7bb4885af';
+        const senderID = req.id;
+        const receiverID = req.params.id;
         const {message} = req.body;
-        console.log("sender",senderId);
-        console.log("reeiver",receiverId)
         if(!message)
         {
             return res.status(400).json({message:"Message is required"});
         }
 
-        let gotConversation = await Conversation.findOne({participants:{$all:[senderId,receiverId]}});
+        let gotConversation = await Conversation.findOne({participants:{$all:[senderID,receiverID]}});
         if(!gotConversation)
         {
             gotConversation = await Conversation.create({
-                participants:[senderId,receiverId],
+                participants:[senderID,receiverID],
             });
         }
 
         const newMessage = await Message.create({
-            senderId,
-            receiverId,
+            senderID,
+            receiverID,
             message
         });
 
@@ -40,4 +36,19 @@ const sendMessage =async (req, res) => {
     }
 }
 
-module.exports = {sendMessage};
+const getMessage = async(req,res)=>{
+    try {
+        
+        const receiverID = req.params.id;
+        const senderID = req.id;
+        const conversation = await Conversation.findOne({
+                participants:{$all:[senderID,receiverID]}
+        }).populate("messages");
+        console.log(conversation);
+
+    } catch (error) {
+        console.log("Error from getMessage",error);
+    }
+}
+
+module.exports = {sendMessage,getMessage};
