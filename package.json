@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "gitignore": "^0.7.0"
+    "gitignore": "^0.7.0",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "daisyui": "^4.12.10"
   }
 }
