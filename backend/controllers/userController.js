@@ -45,15 +45,20 @@ const login = async (req,res)=>{
     try{
 
         const {userName,password} = req.body;
-        if(!userName || !password)
+        console.log(req.body)
+        if(!userName)
         {
-            return res.status(400).json({message:"Please fill all the fields"});
+            return res.status(400).json({message:"Please fill User Name"});
         }
+        if(!password)
+            {
+                return res.status(400).json({message:"Please fill Password"});
+            }
         const user = await User.findOne({userName});
 
         if(!user)
         {
-            return res.status(400).json({message:"User does not exist"});
+            return res.status(400).json({message:"User does not exist, Enter Correct User Name or Signup"});
         }
 
         const isPasswordMatch = await bcrypt.compare(password,user.password); 
@@ -73,7 +78,7 @@ const login = async (req,res)=>{
     }
     catch(err)
     {
-        console.log(err)
+        console.log("error from backend",err)
     }
 };
 
