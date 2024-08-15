@@ -6,3 +6,15 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 0.9rem;
 }
+
+body::-webkit-scrollbar {
+  width: 6px;
+}
+body::-webkit-scrollbar-track {
+  background: aliceblue;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #000;
+  border-radius: 10px;
+}

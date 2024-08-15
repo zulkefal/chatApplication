@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast'
+import {useDispatch} from 'react-redux'
+import { setAuthUser } from "../redux/Slices/userSlice";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -9,6 +11,9 @@ const Login = () => {
   });
 
   const navigate= useNavigate();
+
+  const dispatch= useDispatch();
+
 
   const handleData = async (e) => {
     e.preventDefault();
@@ -21,24 +26,26 @@ const Login = () => {
         },
         body: JSON.stringify(user),
       });
-
-      const errorResponse = await loginUser.json();
-
-      // Check if the response is not ok
+  
       if (!loginUser.ok) {
+        const errorResponse = await loginUser.json();
         toast.error(errorResponse.message || "Login failed");
         return;
       }
-    
-      if (errorResponse.message === "User logged in successfully") {
+  
+      const response = await loginUser.json();
+  
+      if (response.message === "User logged in successfully") {
         navigate('/');
-        toast.success(errorResponse.message);
+        toast.success(response.message);
+
+
+        dispatch(setAuthUser(response))
       }
   
-      // Reset user state
       setUser({
         userName: "",
-        password: "", // Corrected to match expected field name
+        password: "", 
       });
   
     } catch (error) {
@@ -46,6 +53,7 @@ const Login = () => {
       toast.error("An unexpected error occurred. Please try again.");
     }
   };
+  
   
   return (
     <div>

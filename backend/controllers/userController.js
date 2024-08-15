@@ -95,6 +95,7 @@ const logOut= (req,res)=>{
 const getOtherUsers = async (req,res)=>{
     try {
         const loggedInUserID = req.id;
+        console.log('logged in user id:',loggedInUserID);
         const otherUsers=await User.find({_id:{$ne:loggedInUserID}}).select("-password");
         return res.status(200).json(otherUsers);
 
