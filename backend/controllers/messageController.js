@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const { Conversation } = require("../models/conversationModel");
 const { Message } = require("../models/messageModel");
 
@@ -36,19 +37,29 @@ const sendMessage =async (req, res) => {
     }
 }
 
-const getMessage = async(req,res)=>{
+getMessage = async (req, res) => {
     try {
-        
         const receiverID = req.params.id;
         const senderID = req.id;
-        const conversation = await Conversation.findOne({
-                participants:{$all:[senderID,receiverID]}
-        }).populate("messages");
-        console.log(conversation);
+        console.log(senderID,receiverID);
+        if (!mongoose.Types.ObjectId.isValid(senderID) || !mongoose.Types.ObjectId.isValid(receiverID)) {
+            return res.status(400).json({ message: 'Invalid sender or receiver ID' });
+        }
 
+        const conversation = await Conversation.findOne({
+            participants: { $all: [senderID, receiverID] }
+        }).populate('messages');
+
+        if (!conversation) {
+            return res.status(404).json({ message: 'Conversation not found' });
+        }
+
+        res.status(200).json(conversation);
     } catch (error) {
-        console.log("Error from getMessage",error);
+        console.error('Error from getMessage:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-}
+};
+
 
 module.exports = {sendMessage,getMessage};
