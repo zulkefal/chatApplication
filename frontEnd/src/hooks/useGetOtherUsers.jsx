@@ -11,7 +11,6 @@ const useGetOtherUsers = () => {
               {method: 'GET',
               credentials: 'include'})
             const data = await response.json()
-            console.log(data)
 
             dispatch(setOtherUsers(data))
             
