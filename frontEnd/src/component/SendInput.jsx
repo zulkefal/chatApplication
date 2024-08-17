@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
 import { IoSend } from "react-icons/io5";
+import {useDispatch} from 'react-redux'
 
 const SendInput = () => {
   const [message,setMessage] = useState('');
 
-  const onSubmitHandler = (e)=>{
+   const dispatch = useDispatch();
+
+  const onSubmitHandler = async (e)=>{
     e.preventDefault();
-    alert(message);
+
+    try {
+      const send = await fetch("http://localhost:8000/api/message/send/66bedcdbc8390d357e9fd08a",{
+        method:'POST',
+        credentials:true
+      })
+    } catch (error) {
+      console.log("error in sending message",error)
+    }
     setMessage('');
   }
   return (
