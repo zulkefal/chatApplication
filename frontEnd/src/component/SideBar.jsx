@@ -3,10 +3,14 @@ import { GrSearch } from "react-icons/gr";
 import OtherUsers from "./OtherUsers";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedUser } from "../redux/Slices/userSlice";
 
 const SideBar = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const {otherUsers }= useSelector(store=>store.user);
+  const dispatch = useDispatch();
   const logoutNow = async () => {
     try {
       const logut = await fetch("http://localhost:8000/api/user/logout", {
@@ -25,6 +29,15 @@ const SideBar = () => {
 
   const searchSubmit = (e) => {
     e.preventDefault();
+    const conversations = otherUsers?.find((user) => user.fullName.toLowerCase().includes(search.toLowerCase()));
+    if(conversations){
+            dispatch(setSelectedUser([conversations]));
+
+      // dispatch(setSelectedUser([conversations]));
+    }
+    else{
+      toast.error("User not found");
+    }
   }
   return (
     <div className="border-r border-slate-500 p-2 flex flex-col">
