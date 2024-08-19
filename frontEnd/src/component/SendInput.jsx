@@ -21,20 +21,21 @@ const SendInput = () => {
         body: JSON.stringify({ message }),
         credentials: 'include',
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         dispatch(setMessages([...messages, data.newMessage]));
       } else {
-        console.log("Failed to send message:", response.statusText);
+        const errorData = await response.json();
+        console.log("Failed to send message:", errorData.message);
       }
     } catch (error) {
       console.log("Error in sending message:", error);
     }
-
+  
     setMessage('');
   };
-
+  
   return (
     <form onSubmit={onSubmitHandler} className='px-4 my-3'>
       <div className='w-full relative'>

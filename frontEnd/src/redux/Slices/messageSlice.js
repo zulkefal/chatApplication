@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const messageSlice = createSlice({
     name: "message",
     initialState: {
-        messages:null
+        messages:[]
     },
     reducers: {
         setMessages: (state, action) => {
-            state.messages = action.payload.messages 
-            }
+            state.messages = action.payload;
+        }
     }
 });
 

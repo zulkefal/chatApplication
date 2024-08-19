@@ -14,10 +14,11 @@ const useGetMessages = () => {
         })
 
         const data = await response.json()
+        console.log('i am data',data)
         if(data)
         {
-            // console.log(data)
-            dispatch(setMessages(data));
+            console.log(data)
+            dispatch(setMessages(data.messages));
         }
         if(!data)
         {
@@ -30,7 +31,7 @@ const useGetMessages = () => {
     }
    }
    fetchMessages();
- },[selectedUser])
+ },[selectedUser?._id,setMessages])
 }
 
 export default useGetMessages
