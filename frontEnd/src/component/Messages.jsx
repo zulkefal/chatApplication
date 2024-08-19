@@ -13,7 +13,7 @@ const Messages = () => {
 
     return (
         <div className="px-4 flex-1 overflow-auto">
-            {messages.map(message => (
+            {messages && messages.map(message => (
                 <Message key={message._id} message={message} />
             ))}
         </div>

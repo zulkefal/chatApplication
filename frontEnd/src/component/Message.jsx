@@ -14,8 +14,8 @@ const Message = ({ message }) => {
   useEffect(() => {
     if (scroll.current) {
       scroll.current.scrollIntoView({ behavior: 'smooth' });
-      // console.log("authUser",user?._id);
-      // console.log("message?.senderId",message?.senderID);
+      console.log("authUser",user?._id);
+      console.log("message?.senderId",message);
     }
   }, [message]); 
 
@@ -25,7 +25,7 @@ const Message = ({ message }) => {
         <div className="w-10 rounded-full">
           <img
             alt="User Avatar"
-            src={message?.senderId === user?._id ? user?.profilePhoto : user?.profilePhoto}
+            src={message?.senderId === authUser?._id ? selectedUser?.profilePhoto : message?.profilePhoto}
           />
         </div>
       </div>
