@@ -7,7 +7,7 @@ const Messages = () => {
     useGetMessages();
 
     const { messages } = useSelector(store => store.message);
-
+    console.log(messages)
     if (!messages || messages.length === 0) {
         return <p className="text-center text-white">No messages found</p>;
     }
