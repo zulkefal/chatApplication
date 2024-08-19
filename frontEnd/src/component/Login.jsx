@@ -38,8 +38,9 @@ const Login = () => {
   
       if (response.message === "User logged in successfully") {
         navigate('/');
+        console.log("login ",response)
         toast.success(response.message);
-
+        localStorage.setItem('authUser', JSON.stringify(response));
 
         dispatch(setAuthUser(response))
       }

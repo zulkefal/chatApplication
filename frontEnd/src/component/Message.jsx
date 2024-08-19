@@ -7,20 +7,25 @@ const Message = ({ message }) => {
   const scroll = useRef();
   const { selectedUser } = useSelector(state => state.user);
   const {authUser}= useSelector(store=>store.user);
+  const storedUser = localStorage.getItem('authUser');
+  const user = JSON.parse(storedUser);
+
 
   useEffect(() => {
     if (scroll.current) {
       scroll.current.scrollIntoView({ behavior: 'smooth' });
+      // console.log("authUser",user?._id);
+      // console.log("message?.senderId",message?.senderID);
     }
   }, [message]); 
 
   return (
-    <div ref={scroll} className={`chat ${authUser?._id === message?.senderId ? 'chat-end' :'chat-start'}`}>
+    <div ref={scroll} className={`chat ${user?._id === message?.senderID ? 'chat-end' : 'chat-start'}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img
             alt="User Avatar"
-            src={message?.senderId  === authUser?._id  ? authUser.profilePhoto: selectedUser?.profilePhoto}
+            src={message?.senderId === user?._id ? user?.profilePhoto : user?.profilePhoto}
           />
         </div>
       </div>

@@ -12,7 +12,7 @@ const {selectedUser}= useSelector(store=>store.user)
     <>
         <div onClick={()=>selectedUserHandle(user)} className={`${selectedUser?._id === user?._id ? 'bg-zinc-400' : 'bg-zinc-600'} flex gap-2 items-center hover:rounded-sm p-2 curspor-pointer`}>
             <div className='avatar online'>
-                <div className='w-12 rounded-full'> <img src={user?.profilePhoto} alt="user-profile" /></div>
+                <div className='w-12 rounded-full'> <img src={user.profilePhoto} alt="user-profile" /></div>
             </div>
             <div className=''>
                 <div className='flex justify-between gap-2'> 
