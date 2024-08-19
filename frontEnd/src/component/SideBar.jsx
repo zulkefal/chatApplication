@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GrSearch } from "react-icons/gr";
 import OtherUsers from "./OtherUsers";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   const logoutNow = async () => {
     try {
       const logut = await fetch("http://localhost:8000/api/user/logout", {
@@ -21,15 +22,21 @@ const SideBar = () => {
       console.log(error);
     }
   };
+
+  const searchSubmit = (e) => {
+    e.preventDefault();
+  }
   return (
     <div className="border-r border-slate-500 p-2 flex flex-col">
-      <form className="flex flex-row items-center m-1 gap-2" action="">
+      <form onSubmit={searchSubmit} className="flex flex-row items-center m-1 gap-2" action="">
         <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
           className="input input-bordered rounded-md text-white border-white"
           placeholder="search"
           type="text"
         />
-        <button className="btn bg-zinc-900 border-white" type="submit">
+        <button type='submit' className="btn bg-zinc-900 border-white" type="submit">
           <GrSearch className="w-6 h-6 outline-none " />
         </button>
       </form>
