@@ -16,7 +16,7 @@ const useGetMessages = () => {
         const data = await response.json()
         if(data)
         {
-            console.log(data)
+            // console.log(data)
             dispatch(setMessages(data));
         }
         if(!data)
