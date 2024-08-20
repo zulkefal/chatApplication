@@ -3,8 +3,24 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import HomePage from './component/HomePage'
 import Login from './component/Login'
 import SignUp from './component/SignUp'
+import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import io from 'socket.io-client'
 
 function App() {
+
+  const {authUser} = useSelector(store=>store.user)
+  const [socket,setSocket]= useState(null)
+  useEffect(()=>{
+    if(authUser){
+      console.log('User is authenticated')
+      const socket = io('http://localhost:8000',{
+
+      })
+
+      setSocket(socket)
+    }
+  })
 
   return (
     <>
