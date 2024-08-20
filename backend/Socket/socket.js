@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:8000',
+    origin: 'http://localhost:5173', // Adjust this to your client URL
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -14,21 +14,39 @@ const io = new Server(server, {
 
 const userSocketMap = {};
 
+const getReceiverSocketID = (receiverID) => {
+  return userSocketMap[receiverID];
+};
+
 io.on('connection', (socket) => {
   console.log('New connection', socket.id);
   const userID = socket.handshake.query.userID;
-  if (userID !== undefined) {
-    console.log('User is authenticated');
-    userSocketMap[userID] = socket.id;
-  }
 
-  io.emit('getOnlineUsers', Object.keys(userSocketMap));
+  if (userID) {
+    console.log('User is authenticated:', userID);
+    userSocketMap[userID] = socket.id;
+    io.emit('getOnlineUsers', Object.keys(userSocketMap));
+  } else {
+    console.log('UserID is undefined, disconnecting socket:', socket.id);
+    socket.disconnect();
+  }
 
   socket.on('disconnect', () => {
     console.log('Disconnected', socket.id);
-    delete userSocketMap[userID];
+    for (const [key, value] of Object.entries(userSocketMap)) {
+      if (value === socket.id) {
+        delete userSocketMap[key];
+        break;
+      }
+    }
     io.emit('getOnlineUsers', Object.keys(userSocketMap));
+  });
+
+  socket.on('error', (err) => {
+    console.error('Socket error:', err);
   });
 });
 
-module.exports = { app, io, server };
+
+
+module.exports = { app, io, server, getReceiverSocketID };

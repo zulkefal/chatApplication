@@ -20,7 +20,7 @@ const Message = ({ message }) => {
   }, [message]); 
 
   return (
-    <div ref={scroll} className={`chat ${user?._id === message?.senderID ? 'chat-end' : 'chat-start'}`}>
+    <div ref={scroll} className={`chat ${user?._id === message?.senderID ? 'chat-end' : 'chat-start '}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img
@@ -32,7 +32,7 @@ const Message = ({ message }) => {
       <div className="chat-header">
         <time className="text-xs opacity-500 text-white">12:45</time>
       </div>
-      <div className="chat-bubble">{message?.message}</div>
+      <div className={` chat-bubble ${user?._id === message?.senderID ? 'bg-gray-200 text-black' : ''}`}>{message?.message}</div>
     </div>
   );
 };

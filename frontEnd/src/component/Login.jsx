@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { setAuthUser } from "../redux/Slices/userSlice";
+import { setAuthUser, setOnlineUsers } from "../redux/Slices/userSlice";
+import io from 'socket.io-client';
+import { setConnectionStatus } from '../redux/Slices/socketSlice';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -16,7 +18,6 @@ const Login = () => {
   const handleData = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!user.userName || !user.password) {
       toast.error("Please fill in all fields.");
       return;
@@ -45,6 +46,33 @@ const Login = () => {
         toast.success(data.message);
         localStorage.setItem('authUser', JSON.stringify(data));
         dispatch(setAuthUser(data));
+
+        const socket = io('http://localhost:8000', {
+          query: {
+            userID: data._id,
+          },
+          withCredentials: true,
+        });
+
+        socket.on('connect', () => {
+          console.log('Socket connected:', socket.id);
+          dispatch(setConnectionStatus(true));
+        });
+
+        socket.on('getOnlineUsers', (data) => {
+          console.log('Online Users', data);
+          dispatch(setOnlineUsers(data));
+        });
+
+        socket.on('disconnect', () => {
+          console.log('Socket disconnected:', socket.id);
+          dispatch(setConnectionStatus(false));
+        });
+
+        socket.on('error', (err) => {
+          console.error('Socket error:', err);
+        });
+
       } else {
         toast.error("Login failed. Please try again.");
       }

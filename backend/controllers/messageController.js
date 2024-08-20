@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const { Conversation } = require("../models/conversationModel");
 const { Message } = require("../models/messageModel");
+const { getReceiverSocketID } = require("../Socket/socket");
 
 const sendMessage =async (req, res) => {
     try {
@@ -29,9 +30,18 @@ const sendMessage =async (req, res) => {
         if(newMessage)
         {
             gotConversation.messages.push(newMessage._id);
-            await gotConversation.save();
-            return res.status(200).json({newMessage});
-        } 
+            
+            
+        }
+        // await gotConversation.save();
+        // await newMessage.save();
+        await Promise.all([gotConversation.save(),newMessage.save()]);
+        const receiverSocketID = getReceiverSocketID(receiverID);
+        if(receiverSocketID)
+        {
+            io.to(receiverSocketID).emit('newMessage',newMessage);
+        }
+        return res.status(200).json({newMessage}); 
     } catch (error) {
         console.log("errrp",error);
     }

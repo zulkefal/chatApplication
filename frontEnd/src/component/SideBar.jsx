@@ -34,8 +34,6 @@ const SideBar = () => {
     if(conversations){
             dispatch(setSelectedUser([conversations]));
             console.log(conversations)
-
-      // dispatch(setSelectedUser([conversations]));
     }
     else{
       toast.error("User not found");
@@ -51,7 +49,7 @@ const SideBar = () => {
           placeholder="search"
           type="text"
         />
-        <button type='submit' className="btn bg-zinc-900 border-white" type="submit">
+        <button type='submit' className="btn bg-zinc-900 border-white">
           <GrSearch className="w-6 h-6 outline-none " />
         </button>
       </form>
