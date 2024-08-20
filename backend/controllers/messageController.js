@@ -41,7 +41,7 @@ getMessage = async (req, res) => {
     try {
         const receiverID = req.params.id;
         const senderID = req.id;
-        console.log(senderID,receiverID);
+        // console.log(senderID,receiverID);
         if (!mongoose.Types.ObjectId.isValid(senderID) || !mongoose.Types.ObjectId.isValid(receiverID)) {
             return res.status(400).json({ message: 'Invalid sender or receiver ID' });
         }

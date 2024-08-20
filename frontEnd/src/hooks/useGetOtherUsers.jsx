@@ -1,27 +1,34 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { setOtherUsers } from '../redux/Slices/userSlice';
+
 const useGetOtherUsers = () => {
   const dispatch = useDispatch();
-  useEffect(()=>{
-    try {
-    
-        const getUser = async () => {
-            const response = await fetch("http://localhost:8000/api/user/",
-              {method: 'GET',
-              credentials: 'include'})
-            const data = await response.json()
 
-            dispatch(setOtherUsers(data))
-            
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/user/", {
+          method: 'GET',
+          credentials: 'include'
+        });
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        getUser();
-        
-    } catch (error) {
-      console.error("Error in getting users:", error);
-    }
-  },[])
-}
 
-export default useGetOtherUsers
+        const data = await response.json();
+
+        dispatch(setOtherUsers(data));
+      } catch (error) {
+        console.error("Error in getting users:", error);
+      }
+    };
+
+    getUser();
+  }, [dispatch]); 
+
+  return null; 
+};
+
+export default useGetOtherUsers;

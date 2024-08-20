@@ -4,7 +4,7 @@ import OtherUsers from "./OtherUsers";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedUser } from "../redux/Slices/userSlice";
+import { setAuthUser, setSelectedUser } from "../redux/Slices/userSlice";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const SideBar = () => {
       const data = await logut.json();
       if (data) {
         navigate("/login");
+        dispatch(setAuthUser(null));
         toast.success("Logout Successfully");
       }
     } catch (error) {

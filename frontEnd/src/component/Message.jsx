@@ -14,8 +14,8 @@ const Message = ({ message }) => {
   useEffect(() => {
     if (scroll.current) {
       scroll.current.scrollIntoView({ behavior: 'smooth' });
-      console.log("authUser",user?._id);
-      console.log("message?.senderId",message);
+      // console.log("authUser",user?._id);
+      // console.log("message?.senderId",message);
     }
   }, [message]); 
 
