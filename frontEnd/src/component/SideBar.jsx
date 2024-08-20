@@ -32,6 +32,7 @@ const SideBar = () => {
     const conversations = otherUsers?.find((user) => user.fullName.toLowerCase().includes(search.toLowerCase()));
     if(conversations){
             dispatch(setSelectedUser([conversations]));
+            console.log(conversations)
 
       // dispatch(setSelectedUser([conversations]));
     }
