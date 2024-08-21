@@ -9,6 +9,7 @@ const Messages = () => {
     useGetRealTimeMessages();
 
     const { messages } = useSelector(store => store.message);
+    
     if (!messages || messages.length === 0) {
         return <p className="text-center text-white">No messages found</p>;
     }

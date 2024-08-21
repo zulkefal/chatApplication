@@ -4,7 +4,7 @@ import OtherUsers from "./OtherUsers";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuthUser, setSelectedUser } from "../redux/Slices/userSlice";
+import { setAuthUsers, setSelectedUser } from "../redux/Slices/userSlice";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const SideBar = () => {
       const data = await logut.json();
       if (data) {
         navigate("/login");
-        dispatch(setAuthUser(null));
+        dispatch(setAuthUsers(null));
         toast.success("Logout Successfully");
       }
     } catch (error) {
@@ -33,7 +33,6 @@ const SideBar = () => {
     const conversations = otherUsers?.find((user) => user.fullName.toLowerCase().includes(search.toLowerCase()));
     if(conversations){
             dispatch(setSelectedUser([conversations]));
-            console.log(conversations)
     }
     else{
       toast.error("User not found");

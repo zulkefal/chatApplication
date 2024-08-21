@@ -28,7 +28,6 @@ const useGetOtherUsers = () => {
     getUser();
   }, [dispatch]); 
 
-  return null; 
 };
 
 export default useGetOtherUsers;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { setAuthUser, setOnlineUsers } from "../redux/Slices/userSlice";
+import { setAuthUsers, setOnlineUsers } from "../redux/Slices/userSlice";
 import io from 'socket.io-client';
 import { setConnectionStatus } from '../redux/Slices/socketSlice';
 
@@ -45,7 +45,8 @@ const Login = () => {
         navigate('/');
         toast.success(data.message);
         localStorage.setItem('authUser', JSON.stringify(data));
-        dispatch(setAuthUser(data));
+        console.log('auth users data',data)
+        dispatch(setAuthUsers(data));
 
         const socket = io('http://localhost:8000', {
           query: {
@@ -54,7 +55,7 @@ const Login = () => {
           withCredentials: true,
         });
 
-        socket.on('connect', () => {
+        socket.on('connection', () => {
           console.log('Socket connected:', socket.id);
           dispatch(setConnectionStatus(true));
         });

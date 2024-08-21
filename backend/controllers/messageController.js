@@ -30,8 +30,6 @@ const sendMessage =async (req, res) => {
         if(newMessage)
         {
             gotConversation.messages.push(newMessage._id);
-            
-            
         }
         // await gotConversation.save();
         // await newMessage.save();
@@ -47,11 +45,11 @@ const sendMessage =async (req, res) => {
     }
 }
 
-getMessage = async (req, res) => {
+const getMessage = async (req, res) => {
     try {
         const receiverID = req.params.id;
         const senderID = req.id;
-        // console.log(senderID,receiverID);
+        console.log(senderID,receiverID);
         if (!mongoose.Types.ObjectId.isValid(senderID) || !mongoose.Types.ObjectId.isValid(receiverID)) {
             return res.status(400).json({ message: 'Invalid sender or receiver ID' });
         }
