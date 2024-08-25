@@ -1,13 +1,15 @@
 const { default: mongoose } = require("mongoose");
 const { Conversation } = require("../models/conversationModel");
 const { Message } = require("../models/messageModel");
-const { getReceiverSocketID } = require("../Socket/socket");
+const { getReceiverSocketID, io } = require("../Socket/socket");
 
 const sendMessage =async (req, res) => {
     try {
         const senderID = req.id;
         const receiverID = req.params.id;
         const {message} = req.body;
+        
+
         if(!message)
         {
             return res.status(400).json({message:"Message is required"});
@@ -35,6 +37,8 @@ const sendMessage =async (req, res) => {
         // await newMessage.save();
         await Promise.all([gotConversation.save(),newMessage.save()]);
         const receiverSocketID = getReceiverSocketID(receiverID);
+        console.log("receiverSocketID",receiverSocketID)
+
         if(receiverSocketID)
         {
             io.to(receiverSocketID).emit('newMessage',newMessage);
@@ -49,7 +53,8 @@ const getMessage = async (req, res) => {
     try {
         const receiverID = req.params.id;
         const senderID = req.id;
-        console.log(senderID,receiverID);
+        // console.log("senderID in Get Message",senderID);
+        // console.log("receiverID in GET Message",receiverID);
         if (!mongoose.Types.ObjectId.isValid(senderID) || !mongoose.Types.ObjectId.isValid(receiverID)) {
             return res.status(400).json({ message: 'Invalid sender or receiver ID' });
         }

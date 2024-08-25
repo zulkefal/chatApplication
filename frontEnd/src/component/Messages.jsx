@@ -9,16 +9,18 @@ const Messages = () => {
     useGetRealTimeMessages();
 
     const { messages } = useSelector(store => store.message);
-    
-    if (!messages || messages.length === 0) {
-        return <p className="text-center text-white">No messages found</p>;
-    }
+
 
     return (
-        <div className="px-4 flex-1 overflow-auto">
-            {messages && messages.map(message => (
-                <Message key={message._id} message={message} />
-            ))}
+        <div className='px-4 flex-1 overflow-auto'>
+            {
+               messages && messages?.map((message) => {
+                    return (
+                        <Message key={message._id} message={message} />
+                    )
+                })
+            }
+
         </div>
     );
 };

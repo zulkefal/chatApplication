@@ -8,7 +8,14 @@ const store = configureStore({
         user: userSlice,
         message: messageSlice,
         socket: socketSlice
-    }
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredPaths: ['socket.socket'],
+                ignoredActions: ['socket/setSocket'],
+            },
+        }),
 });
 
 export default store;

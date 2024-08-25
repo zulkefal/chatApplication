@@ -26,7 +26,7 @@ const MessageContainer = () => {
             <div className="w-12 rounded-full">
               {" "}
               <img
-                src={selectedUser?.profilePhoto}
+                src={selectedUser.profilePhoto}
                 alt="user-profile"
               />
             </div>

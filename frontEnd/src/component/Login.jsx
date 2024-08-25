@@ -1,10 +1,11 @@
+// Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { setAuthUsers, setOnlineUsers } from "../redux/Slices/userSlice";
 import io from 'socket.io-client';
-import { setConnectionStatus } from '../redux/Slices/socketSlice';
+import { setConnectionStatus, setSocket } from '../redux/Slices/socketSlice';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -40,14 +41,14 @@ const Login = () => {
       }
 
       const data = await response.json();
+      // console.log('login data:', data);
 
-      if (data.message === "User logged in successfully") {
+      if (data) {
         navigate('/');
         toast.success(data.message);
-        localStorage.setItem('authUser', JSON.stringify(data));
-        console.log('auth users data',data)
         dispatch(setAuthUsers(data));
-
+        // console.log(data)
+        
         const socket = io('http://localhost:8000', {
           query: {
             userID: data._id,
@@ -55,24 +56,26 @@ const Login = () => {
           withCredentials: true,
         });
 
-        socket.on('connection', () => {
-          console.log('Socket connected:', socket.id);
-          dispatch(setConnectionStatus(true));
-        });
+        
+dispatch(setSocket(socket));
 
-        socket.on('getOnlineUsers', (data) => {
-          console.log('Online Users', data);
-          dispatch(setOnlineUsers(data));
-        });
+socket.on('connect', () => {
+  // console.log('Socket connected:', socket.id);
+  dispatch(setConnectionStatus(true));
+});
 
-        socket.on('disconnect', () => {
-          console.log('Socket disconnected:', socket.id);
-          dispatch(setConnectionStatus(false));
-        });
+socket.on('getOnlineUsers', (data) => {
+  dispatch(setOnlineUsers(data));
+});
 
-        socket.on('error', (err) => {
-          console.error('Socket error:', err);
-        });
+socket.on('disconnect', () => {
+  // console.log('Socket disconnected:', socket.id);
+  dispatch(setConnectionStatus(false));
+});
+
+socket.on('error', (err) => {
+  console.error('Socket error:', err);
+});
 
       } else {
         toast.error("Login failed. Please try again.");
@@ -105,8 +108,7 @@ const Login = () => {
               className="w-full p-1 bg-white text-black placeholder-gray-400 rounded-lg"
               placeholder="Enter User Name"
               value={user.userName}
-              onChange={(e) => setUser({ ...user, userName: e.target.value })}
-            />
+              onChange={(e) => setUser({ ...user, userName: e.target.value })} />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-white" htmlFor="password">
@@ -118,8 +120,7 @@ const Login = () => {
               type="password"
               placeholder="Enter Password"
               value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
+              onChange={(e) => setUser({ ...user, password: e.target.value })} />
           </div>
           <div className="flex flex-col gap-2">
             <Link className="text-red-400 break-word" to="/signup">

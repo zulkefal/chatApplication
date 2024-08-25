@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { Children, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 
@@ -6,33 +6,32 @@ const Message = ({ message }) => {
 
   const scroll = useRef();
   const { selectedUser } = useSelector(state => state.user);
-  const {authUser}= useSelector(store=>store.user);
-  // const storedUser = localStorage.getItem('authUser');
-  // const user = JSON.parse(storedUser);
+  const {authUsers}= useSelector(store=>store.user);
+  console.log('selected',selectedUser)
+  console.log('auth',authUsers)
+
+
 
 
   useEffect(() => {
     if (scroll.current) {
       scroll.current.scrollIntoView({ behavior: 'smooth' });
-      console.log("authUser",authUser?._id);
-      console.log("message?.senderId",message?.senderID);
     }
   }, [message]); 
 
   return (
-    <div ref={scroll} className={`chat ${authUser?._id === message?.senderID ? 'chat-end' : 'chat-start '}`}>
+    <div ref={scroll} className={`chat ${authUsers?._id === message?.senderID ? 'chat-end' : 'chat-start '}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img
             alt="User Avatar"
-            src={message?.senderId === authUser?._id ? selectedUser?.profilePhoto : message?.profilePhoto}
+            src={authUsers?._id === message?.senderID ? authUsers.profilePhoto : selectedUser.profilePhoto}
           />
         </div>
       </div>
       <div className="chat-header">
-        <time className="text-xs opacity-500 text-white">12:45</time>
       </div>
-      <div className={` chat-bubble ${authUser?._id === message?.senderID ? 'bg-gray-200 text-black' : ''}`}>{message?.message}</div>
+      <div className={` chat-bubble ${authUsers?._id === message?.senderID ? 'bg-gray-200 text-black' : ''}`}>{message?.message}</div>
     </div>
   );
 };

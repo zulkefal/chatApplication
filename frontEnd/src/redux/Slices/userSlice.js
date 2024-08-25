@@ -11,6 +11,7 @@ const userSlice= createSlice({
     reducers:{
         setAuthUsers:(state,action)=>{
             state.authUsers = action.payload
+
         },
         setOtherUsers:(state,action)=>{
             state.otherUsers = action.payload
