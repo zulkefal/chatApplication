@@ -14,7 +14,9 @@ const messageMode = new mongoose.Schema({
 
     message:{
         type:String,
-        required:true
+    },
+    file:{
+        type:String
     }
 },{timestamps:true})
 

@@ -32,8 +32,10 @@ const MessageContainer = () => {
             </div>
           </div>
           <div className="">
-            <div className="flex justify-between gap-2">
-              <p className="text-white">{selectedUser?.fullName}</p>
+            <div className="flex justify-between flex-col gap-2">
+              <p className="text-white text-xl">{selectedUser?.fullName}</p>
+              
+              <sub className="text-white">{isOnline ? 'Online' : 'Offline' }</sub>
             </div>
           </div>
         </div>

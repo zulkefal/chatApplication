@@ -8,12 +8,11 @@ const sendMessage =async (req, res) => {
         const senderID = req.id;
         const receiverID = req.params.id;
         const {message} = req.body;
-        
+        const file = req.file;
 
-        if(!message)
-        {
-            return res.status(400).json({message:"Message is required"});
-        }
+        if (!message && !file) {
+            return res.status(400).json({ message: "Message or file is required" });
+          }
 
         let gotConversation = await Conversation.findOne({participants:{$all:[senderID,receiverID]}});
         if(!gotConversation)
@@ -26,7 +25,8 @@ const sendMessage =async (req, res) => {
         const newMessage = await Message.create({
             senderID,
             receiverID,
-            message
+            message,
+            file: file ? file.path : null 
         });
 
         if(newMessage)
@@ -37,7 +37,7 @@ const sendMessage =async (req, res) => {
         // await newMessage.save();
         await Promise.all([gotConversation.save(),newMessage.save()]);
         const receiverSocketID = getReceiverSocketID(receiverID);
-        console.log("receiverSocketID",receiverSocketID)
+        // console.log("receiverSocketID",receiverSocketID)
 
         if(receiverSocketID)
         {
