@@ -43,7 +43,6 @@ const register = async (req,res)=>{
 }
 const login = async (req,res)=>{
     try{
-
         const {userName,password} = req.body;
         if(!userName)
         {

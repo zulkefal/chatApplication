@@ -15,8 +15,10 @@ const SendInput = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('message', message);
+    console.log('form withyut mfile',formData)
     if (file) {
       formData.append('file', file);
+      console.log("formdaa with file",formData)
     }
     try {
       const response = await fetch(

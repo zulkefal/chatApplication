@@ -7,8 +7,7 @@ const path = require('path');
 const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const cookieParser = require('cookie-parser');
-const { app, server, io } = require('./Socket/socket'); // Import `io`
-
+const { app, server, io } = require('./Socket/socket'); 
 dotenv.config();
 
 app.use(express.json());
