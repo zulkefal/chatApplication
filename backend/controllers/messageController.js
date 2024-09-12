@@ -37,7 +37,7 @@ const sendMessage =async (req, res) => {
         // await newMessage.save();
         await Promise.all([gotConversation.save(),newMessage.save()]);
         const receiverSocketID = getReceiverSocketID(receiverID);
-        // console.log("receiverSocketID",receiverSocketID)
+        console.log("receiverSocketID",receiverSocketID)
 
         if(receiverSocketID)
         {
